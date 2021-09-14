@@ -10,9 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-from pathlib import Path
-from datetime import timedelta
 import os
+from datetime import timedelta
+from pathlib import Path
+# from api.authentication import CookieHandlerJWTAuthentication
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -61,6 +62,8 @@ CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000"
 ]
 
+CSRF_TRUSTED_ORIGINS = ['localhost:3000']
+
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
@@ -87,6 +90,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'api.authentication.CookieHandlerJWTAuthentication',
     ],
 }
 
