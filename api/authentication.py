@@ -8,7 +8,7 @@ class CookieHandlerJWTAuthentication(JWTAuthentication):
         # If cookie contains access token, put it inside authorization header
         access_token = request.COOKIES.get('access_token')
         if not access_token:
-            Response({"message": 'no Token Him'})
+            Response({"message": 'no Token'})
         else:
             Response(access_token)
 

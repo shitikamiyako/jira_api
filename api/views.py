@@ -1,6 +1,7 @@
 import jwt
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
+from django.middleware.csrf import get_token
 from rest_framework import status, permissions, generics, viewsets
 from rest_framework.response import Response
 from rest_framework_simplejwt import exceptions as jwt_exp
@@ -13,6 +14,10 @@ from .models import Task, Category, Profile
 from .serializers import UserSerializer, CategorySerializer, TaskSerializer, ProfileSerializer
 
 User = get_user_model()
+
+
+def csrf(request):
+    return JsonResponse({'csrfToken': get_token(request)})
 
 
 class TokenObtainView(jwt_views.TokenObtainPairView):
@@ -67,7 +72,7 @@ class TokenRefresh(jwt_views.TokenRefreshView):
         serializer = self.get_serializer(data=request.data)
 
         try:
-            serializer.is_valid(raize_exception=True)
+            serializer.is_valid(raise_exception=True)
         except jwt_exp.TokenError as e:
             raise jwt_exp.InvalidToken(e.args[0])
         # token更新
@@ -87,6 +92,9 @@ class TokenRefresh(jwt_views.TokenRefreshView):
 class CreateUserView(generics.CreateAPIView):
     serializer_class = UserSerializer
     permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
 
 class ListUserView(generics.ListAPIView):
@@ -154,6 +162,7 @@ class LoginUserView(generics.RetrieveUpdateAPIView):
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+    authentication_classes = (CookieHandlerJWTAuthentication,)
 
     def perform_create(self, serializer):
         serializer.save(user_profile=self.request.user)
