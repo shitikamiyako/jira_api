@@ -26,7 +26,8 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = 'rcj(l!2j5lkiov=)(xlal8%)s!4f#(h7lc9r5#16@=5=80viu2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'config.Middleware.middleware.SameSiteMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -58,11 +60,30 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+# ALLOWED_HOSTS=['http://localhost:3000']
+
+CORS_ALLOW_CREDENTIALS = True
+
+# CORS_ORIGIN_ALLOW_ALL = True
+
+# django-cors-headers3.4.0の場合
 CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "https://localhost:3000",
 ]
 
+# django-cors-headers3.5.0の場合
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000"
+# ]
+
 CSRF_TRUSTED_ORIGINS = ['localhost:3000']
+
+SESSION_COOKIE_SAMESITE = 'None' # default='Lax'
+SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SAMESITE = 'None'
+# X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 ROOT_URLCONF = 'config.urls'
 

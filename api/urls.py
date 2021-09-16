@@ -12,9 +12,9 @@ router.register('profile', ProfileViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('csrf/create', csrf),
-    path('get/jwt/create', TokenObtainView.as_view(), name='jwtcreate'),
-    path('get/jwt/refresh', refresh_get),
-    path('get/jwt/newtoken', TokenRefresh.as_view(), name='jwtrefresh'),
+    path('jwtcookie/create', TokenObtainView.as_view(), name='jwtcreate'),
+    path('jwtcookie/refresh', refresh_get),
+    path('jwtcookie/newtoken', TokenRefresh.as_view(), name='jwtrefresh'),
     path('create/', CreateUserView.as_view(), name='create'),
     path('users/', ListUserView.as_view(), name='users'),
     path('loginuser/', LoginUserView.as_view(), name='loginuser')
