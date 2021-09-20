@@ -6,7 +6,8 @@ from rest_framework import status, permissions, generics, viewsets
 from rest_framework.response import Response
 from rest_framework_simplejwt import exceptions as jwt_exp
 from rest_framework_simplejwt import views as jwt_views
-
+import time
+from rest_framework.decorators import action
 from config import settings
 from . import custompermissions
 from .authentication import CookieHandlerJWTAuthentication
@@ -53,6 +54,8 @@ class TokenObtainView(jwt_views.TokenObtainPairView):
             httponly=True,
         )
 
+        # time.sleep(1)
+
         return res
 
 
@@ -64,6 +67,31 @@ def refresh_get(request):
     except Exception as e:
         print(e)
         return None
+
+
+class LogoutView(jwt_views.TokenObtainPairView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    # LogoutでCookieからToken削除
+    # blacklist()を使って、RefreshTokenを無効にする処理を入れてもよい？
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except jwt_exp.TokenError as e:
+            raise jwt_exp.InvalidToken(e.args[0])
+
+        res = Response(serializer.validated_data, status=status.HTTP_200_OK)
+
+        try:
+            res.delete_cookie("access_token")
+            res.delete_cookie("refresh_token")
+        except Exception as e:
+            print(e)
+            return None
+
+        return Response({"Message": "Logout"}, status=status.HTTP_200_OK)
 
 
 # HTTPRequestのBodyプロパティから送られてきたtokenを受け取る
@@ -164,6 +192,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
     authentication_classes = (CookieHandlerJWTAuthentication,)
 
+
     def perform_create(self, serializer):
         serializer.save(user_profile=self.request.user)
 
@@ -180,11 +209,14 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+    # time.sleep(.10)
+
 
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     permission_classes = (permissions.IsAuthenticated, custompermissions.OwnerPermission,)
+    authentication_classes = (CookieHandlerJWTAuthentication,)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)

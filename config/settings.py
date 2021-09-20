@@ -26,8 +26,8 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = 'rcj(l!2j5lkiov=)(xlal8%)s!4f#(h7lc9r5#16@=5=80viu2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = False
+DEBUG = True
+# DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -70,7 +70,11 @@ CORS_ALLOW_CREDENTIALS = True
 # django-cors-headers3.4.0の場合
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
-    "https://localhost:3000",
+    "http://localhost:3000",
+    "https://127.0.0.1:3000",
+    "https://127.0.0.1:3000",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000"
 ]
 
 # django-cors-headers3.5.0の場合
@@ -78,7 +82,7 @@ CORS_ORIGIN_WHITELIST = [
 #     "http://localhost:3000"
 # ]
 
-CSRF_TRUSTED_ORIGINS = ['localhost:3000']
+CSRF_TRUSTED_ORIGINS = ['localhost:3000', '127.0.0.1']
 
 SESSION_COOKIE_SAMESITE = 'None' # default='Lax'
 SESSION_COOKIE_SECURE = True
@@ -110,8 +114,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'api.authentication.CookieHandlerJWTAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
 
@@ -167,5 +171,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

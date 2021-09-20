@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework import routers
 
 from .views import csrf, TokenObtainView, TaskViewSet, CategoryViewSet, ListUserView, LoginUserView, ProfileViewSet, \
-    CreateUserView, refresh_get, TokenRefresh
+    CreateUserView, refresh_get, TokenRefresh, LogoutView
 
 router = routers.DefaultRouter()
 router.register('tasks', TaskViewSet)
@@ -17,5 +17,6 @@ urlpatterns = [
     path('jwtcookie/newtoken', TokenRefresh.as_view(), name='jwtrefresh'),
     path('create/', CreateUserView.as_view(), name='create'),
     path('users/', ListUserView.as_view(), name='users'),
-    path('loginuser/', LoginUserView.as_view(), name='loginuser')
+    path('loginuser/', LoginUserView.as_view(), name='loginuser'),
+    path('logout/', LogoutView.as_view(), name='logout'),
 ]
