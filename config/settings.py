@@ -19,6 +19,7 @@ import environ
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
 env = environ.Env()
+env = environ.Env()
 env.read_env(os.path.join(BASE_DIR, '.env'))
 
 
@@ -83,10 +84,8 @@ CORS_ORIGIN_WHITELIST = [
 
 CSRF_TRUSTED_ORIGINS = ['localhost:3000', '127.0.0.1']
 
-SESSION_COOKIE_SAMESITE = 'None' # default='Lax'
+SESSION_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True
-# CSRF_COOKIE_SAMESITE = 'None'
-# X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 ROOT_URLCONF = 'config.urls'
 
