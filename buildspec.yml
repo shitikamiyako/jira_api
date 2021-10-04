@@ -4,7 +4,7 @@ phases:
   install:
     runtime-versions:
       python: 3.8
-    commannds:
+    commands:
       # 依存関係をインストール
       - echo Installing dependencies
       - pip install -r requirements.txt
