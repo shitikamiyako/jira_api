@@ -13,8 +13,6 @@ phases:
       - echo Build started on `date`
       - echo Running tests
       - python3 manage.py test
-      - python3 manage.py migrate
-      - python3 manage.py collectstatic
   post_build:
     commands:
       - echo Build completed on `date`
