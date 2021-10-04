@@ -2,9 +2,9 @@ version: 0.2
 
 phases:
   install:
-    runtime-version:
+    runtime-versions:
       python: 3.8
-    comannds:
+    commannds:
       # 依存関係をインストール
       - echo Installing dependencies
       - pip install -r requirements.txt
