@@ -1,0 +1,14 @@
+server {
+        listen 80;
+        server_name 175.41.243.115;
+
+        location = /favicon.ico {access_log off; log_not_found off;}
+        location /static/ {
+                root /home/ubuntu/jira_api;
+        }
+
+        location / {
+                include proxy_params;
+                proxy_pass http://unix:/home/ubuntu/jira_api/config.sock;
+        }
+}
